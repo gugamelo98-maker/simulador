@@ -444,6 +444,11 @@
   function renderCotacaoPanel() {
     document.getElementById('eyebrow-plano').textContent = 'Cotacao';
     const panel = document.getElementById('cotacao-panel-inner');
+    if (!cotacaoCarregada || isNaN(cotacao)) {
+      panel.innerHTML = '<div class="result-placeholder">Carregando cotacao...</div>';
+      setTimeout(renderCotacaoPanel, 500);
+      return;
+    }
     panel.innerHTML = `
       <div class="card">
         <p class="section-label">Cotacao do Dolar hoje</p>
@@ -454,7 +459,7 @@
             Atualizar agora
           </button>
         </div>
-        <div style="font-size:13px;color:var(--text-muted);margin-bottom:24px;" id="cotacao-fonte">1 USD = R$ ${fmtBRL(cotacao)} &nbsp;&middot;&nbsp; Fonte: Open Exchange Rates</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:24px;" id="cotacao-fonte">1 USD = R$ ${fmtBRL(cotacao)}</div>
         <p class="section-label" style="margin-top:16px;">Conversor</p>
         <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-top:8px;">
           <div>
