@@ -398,18 +398,20 @@
   // Carrega cotação do webhook n8n
   async function carregarCotacao() {
     try {
-      const res = await fetch(WEBHOOK);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 4000);
+      const res = await fetch(WEBHOOK, { signal: controller.signal });
+      clearTimeout(timeout);
       const data = await res.json();
-      // O webhook retorna array ou objeto
       const row = Array.isArray(data) ? data[0] : data;
-      cotacao         = parseFloat(row.cotacao);
-      minimoStandard  = parseFloat(row.minimo_standard);
-      minimoPremium   = parseFloat(row.minimo_premium);
-      cotacaoCarregada = true;
-    } catch(e) {
-      // Mantém fallback silenciosamente
-      cotacaoCarregada = true;
-    }
+      const c = parseFloat(row.cotacao);
+      if (!isNaN(c) && c > 0) {
+        cotacao        = c;
+        minimoStandard = parseFloat(row.minimo_standard);
+        minimoPremium  = parseFloat(row.minimo_premium);
+      }
+    } catch(e) { /* usa fallback */ }
+    cotacaoCarregada = true;
     // Atualiza placeholder e hint após carregar
     const min = minimoAtual();
     document.getElementById('aporte').placeholder = fmtBRL(min);
