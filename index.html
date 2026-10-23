@@ -446,22 +446,20 @@
   function renderCotacaoPanel() {
     document.getElementById('eyebrow-plano').textContent = 'Cotacao';
     const panel = document.getElementById('cotacao-panel-inner');
-    if (!cotacaoCarregada || isNaN(cotacao)) {
-      panel.innerHTML = '<div class="result-placeholder">Carregando cotacao...</div>';
-      setTimeout(renderCotacaoPanel, 500);
-      return;
-    }
+    const c = (!isNaN(cotacao) && cotacao > 0) ? cotacao : 5.04;
+    const ms = (!isNaN(minimoStandard) && minimoStandard > 0) ? minimoStandard : 5040;
+    const mp = (!isNaN(minimoPremium) && minimoPremium > 0) ? minimoPremium : 504000;
     panel.innerHTML = `
       <div class="card">
         <p class="section-label">Cotacao do Dolar hoje</p>
         <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-          <div style="font-family:'Montserrat',sans-serif;font-size:clamp(28px,5vw,48px);font-weight:900;color:var(--gold);" id="cotacao-valor-display">R$ ${fmtBRL(cotacao)}</div>
+          <div style="font-family:'Montserrat',sans-serif;font-size:clamp(28px,5vw,48px);font-weight:900;color:var(--gold);" id="cotacao-valor-display">R$ ${fmtBRL(c)}</div>
           <button onclick="atualizarCotacaoAgora()" id="btn-atualizar"
             style="background:var(--gold);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.18s;">
             Atualizar agora
           </button>
         </div>
-        <div style="font-size:13px;color:var(--text-muted);margin-bottom:24px;" id="cotacao-fonte">1 USD = R$ ${fmtBRL(cotacao)}</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:24px;" id="cotacao-fonte">1 USD = R$ ${fmtBRL(c)}</div>
         <p class="section-label" style="margin-top:16px;">Conversor</p>
         <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-top:8px;">
           <div>
@@ -485,8 +483,8 @@
           </div>
         </div>
         <div style="margin-top:20px;padding:14px 16px;background:var(--surface2);border-radius:var(--radius-sm);font-size:12px;color:var(--text-muted);line-height:1.6;">
-          Minimo Standart: <strong style="color:var(--text);">R$ ${fmtBRL(minimoStandard)}</strong> (US$ ${fmtUSD(MIN_USD.standard)}) &nbsp;&middot;&nbsp;
-          Minimo Premium: <strong style="color:var(--text);">R$ ${fmtBRL(minimoPremium)}</strong> (US$ ${fmtUSD(MIN_USD.premium)})
+          Minimo Standart: <strong style="color:var(--text);">R$ ${fmtBRL(ms)}</strong> (US$ ${fmtUSD(MIN_USD.standard)}) &nbsp;&middot;&nbsp;
+          Minimo Premium: <strong style="color:var(--text);">R$ ${fmtBRL(mp)}</strong> (US$ ${fmtUSD(MIN_USD.premium)})
         </div>
       </div>`;
 
